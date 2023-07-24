@@ -20,7 +20,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
-import { InputUserComponent } from './components/input-user/input-user.component';
 import { Home } from './components/home/home.component';
 import { Movie } from './components/movie/movie.component';
 import { ApiService } from './api.service';
@@ -29,14 +28,14 @@ import { Search } from './components/search/search.component';
 
 const appRoutes: Routes = [
   {path: '', component: Home},
-  {path: 'movie/:id', component: Movie}
+  {path: 'movie/:id', component: Movie},
+  {path: 'search/:string', component: Search}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    InputUserComponent,
     Home,
     Movie,
     MovieCard,

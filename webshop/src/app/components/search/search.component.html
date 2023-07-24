@@ -2,8 +2,16 @@
     <h2 className="title">
       Resultados para: <span className="query-text">{{ query }}</span>
     </h2>
-    <div className="movies-container">
-      <!-- {movies.length > 0 &&
-        movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)} -->
+    <div className="movies-container" *ngIf="verifyMoviesLength(); else noMoviesFound">
+        <div *ngFor="let movie of searchedMovies.results">
+          <app-movie-card
+          key="movie.id"
+          [movie]="movie"
+          [showLink]="true"
+          ></app-movie-card>
+        </div>
     </div>
-  </div>
+    <ng-template #noMoviesFound>
+      Nenhum Filme encontrado por "{{ query }}""
+    </ng-template>
+</div>

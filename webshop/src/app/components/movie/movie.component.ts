@@ -17,6 +17,5 @@ export class Movie implements OnInit {
 
   ngOnInit() {
     this.movie = this.apiService.getSelectedMovie()
-    console.log(this.movie)
   }
 }
