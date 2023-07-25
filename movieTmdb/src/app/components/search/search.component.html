@@ -1,0 +1,17 @@
+<div className="container">
+    <h2 className="title">
+      Resultados para: <span className="query-text">{{ query }}</span>
+    </h2>
+    <div className="movies-container" *ngIf="verifyMoviesLength(); else noMoviesFound">
+        <div *ngFor="let movie of searchedMovies.results">
+          <app-movie-card
+          key="movie.id"
+          [movie]="movie"
+          [showLink]="true"
+          ></app-movie-card>
+        </div>
+    </div>
+    <ng-template #noMoviesFound>
+      Nenhum Filme encontrado por "{{ query }}""
+    </ng-template>
+</div>

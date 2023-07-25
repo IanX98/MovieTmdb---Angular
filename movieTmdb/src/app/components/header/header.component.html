@@ -1,0 +1,14 @@
+<mat-toolbar class="max-w-7x1 mx-auto border-x justify-between">
+  <a routerLink=""> Code with Ian</a>
+    <form action="">
+        <input 
+        type="text" 
+        placeholder="Busque um filme"
+        [(ngModel)]="searchText"
+        name="searchText"
+        >
+        <button type="submit" (click)="onSearchChange(searchText)">
+            <mat-icon matBadgeColor="warn">search</mat-icon>
+        </button>
+    </form>
+</mat-toolbar>

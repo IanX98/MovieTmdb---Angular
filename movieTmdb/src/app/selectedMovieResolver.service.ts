@@ -1,0 +1,13 @@
+import { Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+
+@Injectable()
+export class SelectedMovieResolver implements Resolve<any> {
+  constructor(private apiService: ApiService) {}
+
+  resolve(): Observable<any> {
+    return this.apiService.getSelectedMovie();
+  };
+}

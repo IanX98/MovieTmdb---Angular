@@ -1,0 +1,10 @@
+<div className="movie-card">
+    <img src="{{ imageSrc }}" alt="{{ movie.title }}" />
+    <h2>{{ movie.title }}</h2>
+    <p><mat-icon>star</mat-icon> {{ movie.vote_average }}</p>
+      <div *ngIf="showLink">
+          <a 
+          routerLink="{{ moviePath }}" 
+          (click)="selectMovie(movie)">Detalhes</a>
+      </div>
+  </div>
