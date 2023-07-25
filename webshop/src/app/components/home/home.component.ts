@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ApiService } from "src/app/api.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'app-home',
@@ -9,7 +9,7 @@ import { ApiService } from "src/app/api.service";
 
 export class Home implements OnInit {
 
-  constructor(private apiService: ApiService) {}
+  constructor(private route: ActivatedRoute) {}
 
   topMovies: any;
 
@@ -22,13 +22,8 @@ export class Home implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.getTopRatedMovies().subscribe(
-      (response) => {
-        this.topMovies = response;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+    this.route.data.subscribe((resolvedData) => {
+      this.topMovies = resolvedData["topRatedData"]; 
+    });
+  };
 }

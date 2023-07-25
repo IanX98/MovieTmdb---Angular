@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ApiService } from "src/app/api.service";
 
 @Component({
     selector: 'app-movie',
@@ -13,9 +12,11 @@ export class Movie implements OnInit {
   movie!: any;
   showLink = false;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.movie = this.apiService.getSelectedMovie()
+    this.route.data.subscribe((resolvedData) => {
+      this.movie = resolvedData["selectedMovie"]; 
+    });
   }
 }

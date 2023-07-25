@@ -16,19 +16,34 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { HttpClientModule } from '@angular/common/http';
 
+import { ApiService } from './api.service';
+import { TopRatedResolver } from './topRatedResolver.service';
+import { SelectedMovieResolver } from './selectedMovieResolver.service';
+
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { Home } from './components/home/home.component';
 import { Movie } from './components/movie/movie.component';
-import { ApiService } from './api.service';
 import { MovieCard } from './components/movie-card/movie-card.component';
 import { Search } from './components/search/search.component';
 
 const appRoutes: Routes = [
-  {path: '', component: Home},
-  {path: 'movie/:id', component: Movie},
+  {
+    path: '',
+    component: Home,
+    resolve: {
+      topRatedData: TopRatedResolver 
+    }
+  },
+  {
+    path: 'movie/:id',
+    component: Movie,
+    resolve: {
+      selectedMovie: SelectedMovieResolver
+    }
+    },
   {path: 'search/:string', component: Search}
 ]
 
@@ -61,7 +76,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   exports: [RouterModule],
-  providers: [ApiService],
+  providers: [ApiService, TopRatedResolver, SelectedMovieResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

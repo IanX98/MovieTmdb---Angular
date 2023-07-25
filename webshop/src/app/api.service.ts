@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,9 @@ export class ApiService {
     query!: string;
 
     topRatedURL = `${this.API_MOVIE}top_rated?${this.API_KEY}`;
-    
-    getTopRatedMovies = () => {
-      return this.http.get(this.topRatedURL);
+
+    getTopRatedMovies(): Observable<any> {
+      return this.http.get<string>(this.topRatedURL);
     }
 
     searchMovies = (query: string) => {
