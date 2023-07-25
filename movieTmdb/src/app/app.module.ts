@@ -28,6 +28,7 @@ import { Home } from './components/home/home.component';
 import { Movie } from './components/movie/movie.component';
 import { MovieCard } from './components/movie-card/movie-card.component';
 import { Search } from './components/search/search.component';
+import { PageNotFound } from './components/page-not-found/pageNotFound.component';
 
 const appRoutes: Routes = [
   {
@@ -44,7 +45,9 @@ const appRoutes: Routes = [
       selectedMovie: SelectedMovieResolver
     }
     },
-  {path: 'search/:string', component: Search}
+  {path: 'search/:string', component: Search},
+  {path: 'not-found', component: PageNotFound},
+  {path: '**', redirectTo: '/not-found'},
 ]
 
 @NgModule({
