@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from 'src/app/api.service';
+import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +10,7 @@ export class HeaderComponent {
 
   searchText = '';
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: TmdbApiService, private router: Router) {}
 
   onSearchChange(text: string) {
 

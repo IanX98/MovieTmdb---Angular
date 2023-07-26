@@ -1,6 +1,6 @@
 import { Component, OnInit  } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ApiService } from 'src/app/api.service';
+import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
   selector: 'app-search',
@@ -12,7 +12,7 @@ export class Search implements OnInit {
     query!: string;
     searchedMovies!: any;
 
-    constructor(private apiService: ApiService, private route: ActivatedRoute) {}
+    constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
 
     verifyMoviesLength() {
       if (this.searchedMovies?.results.length > 0) {

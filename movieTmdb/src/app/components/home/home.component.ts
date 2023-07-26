@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
     selector: 'app-home',
@@ -9,21 +10,34 @@ import { ActivatedRoute } from "@angular/router";
 
 export class Home implements OnInit {
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute,private apiService: TmdbApiService) {}
 
-  topMovies: any;
+  showMovies: any;
+  allMovies: any;
+  pageSize = 10;
+  currentPage = 1;
 
   verifyMoviesLength() {
-    if (this.topMovies != null) {
+    if (this.allMovies != null) {
       return true
     } 
 
     return false
   }
 
+  pageChanged(event: any): void {
+    this.currentPage = event;
+    this.updatePagedItems();
+  }
+
+  updatePagedItems(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.showMovies = this.allMovies.slice(startIndex, endIndex);
+  }
+
   ngOnInit() {
-    this.route.data.subscribe((resolvedData) => {
-      this.topMovies = resolvedData["topRatedData"]; 
-    });
+    this.apiService.getAllMovies()
+    this.allMovies = this.apiService.allMovies
   };
 }

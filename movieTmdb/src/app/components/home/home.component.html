@@ -1,12 +1,9 @@
-<div className="container">
-    <h2 className="title">Melhores filmes:</h2>
-    <div className="movies-container" *ngIf="verifyMoviesLength()">
-        <div *ngFor="let movie of topMovies.results">
-            <app-movie-card
-            key="movie.id"
-            [movie]="movie"
-            [showLink]="true"
-            ></app-movie-card>
-        </div>
-    </div>
-  </div>
+<h2 className="title">Filmes disponíveis:</h2>
+<div *ngFor="let movie of allMovies | paginate: { itemsPerPage: pageSize, currentPage: currentPage }">
+    <app-movie-card
+        key="movie.id"
+        [movie]="movie"
+        [showLink]="true"
+    ></app-movie-card>
+</div>
+<pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>

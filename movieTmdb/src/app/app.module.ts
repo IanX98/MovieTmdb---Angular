@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -14,9 +16,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
-import { HttpClientModule } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 
-import { ApiService } from './api.service';
+import { TmdbApiService } from './tmdbApi.service';
 import { TopRatedResolver } from './topRatedResolver.service';
 import { SelectedMovieResolver } from './selectedMovieResolver.service';
 
@@ -29,11 +31,13 @@ import { Movie } from './components/movie/movie.component';
 import { MovieCard } from './components/movie-card/movie-card.component';
 import { Search } from './components/search/search.component';
 import { PageNotFound } from './components/page-not-found/pageNotFound.component';
+import { TopRatedMovies } from './components/top-rated-films/topRatedMovies.component';
 
 const appRoutes: Routes = [
+  {path: '',component: Home,},
   {
-    path: '',
-    component: Home,
+    path: 'topRatedMovies',
+    component: TopRatedMovies,
     resolve: {
       topRatedData: TopRatedResolver 
     }
@@ -58,6 +62,7 @@ const appRoutes: Routes = [
     Movie,
     MovieCard,
     Search,
+    TopRatedMovies
   ],
   imports: [
     BrowserModule,
@@ -76,10 +81,12 @@ const appRoutes: Routes = [
     MatListModule,
     FormsModule,
     HttpClientModule, 
+    CommonModule,
+    NgxPaginationModule,
     RouterModule.forRoot(appRoutes)
   ],
   exports: [RouterModule],
-  providers: [ApiService, TopRatedResolver, SelectedMovieResolver],
+  providers: [TmdbApiService, TopRatedResolver, SelectedMovieResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

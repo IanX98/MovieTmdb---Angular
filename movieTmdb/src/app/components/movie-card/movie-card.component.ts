@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { ApiService } from "src/app/api.service";
+import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
     selector: 'app-movie-card',
@@ -15,7 +15,7 @@ export class MovieCard implements OnInit {
     imageSrc!: string;
     moviePath: any;
 
-    constructor(private apiService: ApiService) {}
+    constructor(private apiService: TmdbApiService) {}
   
     ngOnInit() {
       this.moviePath = `/movie/${this.movie.id}`;
