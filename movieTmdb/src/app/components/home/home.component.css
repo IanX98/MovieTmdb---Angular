@@ -60,3 +60,45 @@
     background-color: transparent;
     color: #f7d354;
   } */
+
+/* movies.component.css */
+
+/* Custom styles for pagination buttons */
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Style for individual pagination button */
+.pagination-button {
+  margin: 5px;
+  min-width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3;
+}
+
+/* Style for disabled "Previous" button */
+.pagination-button[disabled='true']:before {
+  content: '←';
+  margin-right: 5px;
+}
+
+/* Style for "Next" button */
+.next-button::after {
+  content: '→';
+  margin-left: 5px;
+}

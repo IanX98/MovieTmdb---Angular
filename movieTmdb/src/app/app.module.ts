@@ -32,9 +32,17 @@ import { MovieCard } from './components/movie-card/movie-card.component';
 import { Search } from './components/search/search.component';
 import { PageNotFound } from './components/page-not-found/pageNotFound.component';
 import { TopRatedMovies } from './components/top-rated-films/topRatedMovies.component';
+// import { AllMoviesResolver } from './allMoviesResolver';
 
 const appRoutes: Routes = [
-  {path: '',component: Home,},
+  {path: '', component: Home,},
+  // {
+  //   path: '',
+  //   component: Home,
+  //   resolve: {
+  //     allMoviesResolver: AllMoviesResolver
+  //   }
+  // },
   {
     path: 'topRatedMovies',
     component: TopRatedMovies,

@@ -21,40 +21,48 @@ export class TmdbApiService {
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
-    getAllMovies() {
-      return new Promise<any[]>((resolve, reject) => {
-        let page = 1;
+    getAllMovies(page: number): Observable<any> {
+      const url = `${this.API_URL}/movie/popular`;
+      const params = {
+        api_key: this.API_KEY,
+        page: page.toString()
+      };
+
+      return this.http.get<any>(url, { params });
+      // return this.http.get<string>(`${this.API_URL}/discover/movie`);
+      // return new Promise<any[]>((resolve, reject) => {
+      //   let page = 1;
   
-        const fetchMovies = () => {
-          const params = new HttpParams()
-            .set('api_key', this.API_KEY)
-            .set('language', 'en-US')
-            .set('sort_by', 'popularity.desc')
-            .set('include_adult', 'false')
-            .set('include_video', 'false')
-            .set('page', page.toString());
+      //   const fetchMovies = () => {
+      //     const params = new HttpParams()
+      //       .set('api_key', this.API_KEY)
+      //       .set('language', 'en-US')
+      //       .set('sort_by', 'popularity.desc')
+      //       .set('include_adult', 'false')
+      //       .set('include_video', 'false')
+      //       .set('page', page.toString());
             
   
-          return this.http.get<any>(`${this.API_URL}/discover/movie`, { params })
-            .toPromise()
-            .then(response => {
-                this.allMovies.push(...response.results);
-                page++;
-                fetchMovies();
+      //     return this.http.get<any>(`${this.API_URL}/discover/movie`, { params })
+      //       .toPromise()
+      //       .then(response => {
+      //           this.allMovies.push(...response.results);
+      //           page++;
+      //           fetchMovies();
               
-              if (response?.results && response.results.length > 0) {
-                this.allMovies.push(...response.results);
-                page++;
-                fetchMovies();
-              } else {
-                resolve(this.allMovies);
-              }
-            })
-            .catch(error => reject(error));
-        };
+      //         if (response?.results && response.results.length > 0) {
+      //           this.allMovies.push(...response.results);
+      //           page++;
+      //           fetchMovies();
+      //         } else {
+      //           resolve(this.allMovies);
+      //         }
+      //       })
+      //       .catch(error => reject(error));
+      //   };
   
-        fetchMovies();
-      });
+      //   fetchMovies();
+      // });
     }
 
     getTopRatedMovies(): Observable<any> {

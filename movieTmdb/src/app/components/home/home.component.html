@@ -1,9 +1,19 @@
 <h2 className="title">Filmes disponíveis:</h2>
-<div *ngFor="let movie of allMovies | paginate: { itemsPerPage: pageSize, currentPage: currentPage }">
+<div *ngFor="let movie of movies">
     <app-movie-card
         key="movie.id"
         [movie]="movie"
         [showLink]="true"
     ></app-movie-card>
 </div>
-<pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  
+<div class="pagination-buttons">
+    <button
+      class="pagination-button"
+      (click)="onPrevious()"
+      [disabled]="currentPage === 1"
+    >
+      Previous
+    </button>
+    <button class="pagination-button next-button" (click)="onNext()">Next</button>
+  </div>

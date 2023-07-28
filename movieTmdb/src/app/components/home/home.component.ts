@@ -10,34 +10,30 @@ import { TmdbApiService } from "src/app/tmdbApi.service";
 
 export class Home implements OnInit {
 
-  constructor(private route: ActivatedRoute,private apiService: TmdbApiService) {}
+  constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
 
-  showMovies: any;
-  allMovies: any;
-  pageSize = 10;
+  movies: any[] = [];
   currentPage = 1;
 
-  verifyMoviesLength() {
-    if (this.allMovies != null) {
-      return true
-    } 
-
-    return false
+  ngOnInit(): void {
+    this.fetchMovies(this.currentPage);
   }
 
-  pageChanged(event: any): void {
-    this.currentPage = event;
-    this.updatePagedItems();
+  fetchMovies(page: number): void {
+    this.apiService.getAllMovies(page).subscribe(response => {
+      this.movies = response.results;
+    });
   }
 
-  updatePagedItems(): void {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.showMovies = this.allMovies.slice(startIndex, endIndex);
+  onNext(): void {
+    this.currentPage++;
+    this.fetchMovies(this.currentPage);
   }
 
-  ngOnInit() {
-    this.apiService.getAllMovies()
-    this.allMovies = this.apiService.allMovies
-  };
+  onPrevious(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchMovies(this.currentPage);
+    }
+  }
 }
