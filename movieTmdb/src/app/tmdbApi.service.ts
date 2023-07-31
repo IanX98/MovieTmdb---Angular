@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams  } from '@angular/common/http';
+import { HttpClient  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
+import TMDBMovie from './models/TmdbMovie';
 
 @Injectable({
   providedIn: 'root'
@@ -15,57 +16,25 @@ export class TmdbApiService {
   API_KEY = 'a11a3a1b7510b6fa1508f15d307460b6';
   API_SEARCH = 'https://api.themoviedb.org/3/search/movie/';
 
-    movie!: any;
+    movie!: TMDBMovie | any;
     query!: string;
-    allMovies: any[] = [];
+    currentPage = 1;
+    allMovies: TMDBMovie[] = [];
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
-    getAllMovies(page: number): Observable<any> {
+    getAllMovies(page: number): Observable<TMDBMovie | any> {
       const url = `${this.API_URL}/movie/popular`;
       const params = {
         api_key: this.API_KEY,
-        page: page.toString()
+        page: page.toString(),
       };
 
-      return this.http.get<any>(url, { params });
-      // return this.http.get<string>(`${this.API_URL}/discover/movie`);
-      // return new Promise<any[]>((resolve, reject) => {
-      //   let page = 1;
-  
-      //   const fetchMovies = () => {
-      //     const params = new HttpParams()
-      //       .set('api_key', this.API_KEY)
-      //       .set('language', 'en-US')
-      //       .set('sort_by', 'popularity.desc')
-      //       .set('include_adult', 'false')
-      //       .set('include_video', 'false')
-      //       .set('page', page.toString());
-            
-  
-      //     return this.http.get<any>(`${this.API_URL}/discover/movie`, { params })
-      //       .toPromise()
-      //       .then(response => {
-      //           this.allMovies.push(...response.results);
-      //           page++;
-      //           fetchMovies();
-              
-      //         if (response?.results && response.results.length > 0) {
-      //           this.allMovies.push(...response.results);
-      //           page++;
-      //           fetchMovies();
-      //         } else {
-      //           resolve(this.allMovies);
-      //         }
-      //       })
-      //       .catch(error => reject(error));
-      //   };
-  
-      //   fetchMovies();
-      // });
+      this.currentPage = page;
+      return this.http.get<string>(url, { params });
     }
 
-    getTopRatedMovies(): Observable<any> {
+    getTopRatedMovies(): Observable<TMDBMovie | any> {
       return this.http.get<string>(this.topRatedURL);
     }
 
@@ -74,7 +43,7 @@ export class TmdbApiService {
       return this.http.get(url);
     }
 
-    setSelectedMovie = (movie: any) => {
+    setSelectedMovie = (movie: TMDBMovie) => {
       this.movie = movie
     }
 

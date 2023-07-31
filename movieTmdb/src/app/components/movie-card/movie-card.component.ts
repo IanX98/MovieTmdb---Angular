@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import TMDBMovie from "src/app/models/TmdbMovie";
 import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
@@ -9,11 +10,11 @@ import { TmdbApiService } from "src/app/tmdbApi.service";
 
 export class MovieCard implements OnInit {
 
-    @Input() movie!: any;
-    @Input() showLink!: any;
+    @Input() movie!: TMDBMovie;
+    @Input() showLink!: boolean;
 
     imageSrc!: string;
-    moviePath: any;
+    moviePath!: string;
 
     constructor(private apiService: TmdbApiService) {}
   
@@ -22,7 +23,7 @@ export class MovieCard implements OnInit {
       this.imageSrc = `${this.apiService.API_IMG}${this.movie.poster_path}`;
   }
 
-    selectMovie(movie: any) {
+    selectMovie(movie: TMDBMovie) {
       this.apiService.setSelectedMovie(movie)
     }
 }

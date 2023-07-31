@@ -32,17 +32,16 @@ import { MovieCard } from './components/movie-card/movie-card.component';
 import { Search } from './components/search/search.component';
 import { PageNotFound } from './components/page-not-found/pageNotFound.component';
 import { TopRatedMovies } from './components/top-rated-films/topRatedMovies.component';
-// import { AllMoviesResolver } from './allMoviesResolver';
+import { AllMoviesResolver } from './allMoviesResolver';
 
 const appRoutes: Routes = [
-  {path: '', component: Home,},
-  // {
-  //   path: '',
-  //   component: Home,
-  //   resolve: {
-  //     allMoviesResolver: AllMoviesResolver
-  //   }
-  // },
+  {
+    path: '',
+    component: Home,
+    resolve: {
+      allMoviesResolver: AllMoviesResolver
+    }
+  },
   {
     path: 'topRatedMovies',
     component: TopRatedMovies,
@@ -94,7 +93,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   exports: [RouterModule],
-  providers: [TmdbApiService, TopRatedResolver, SelectedMovieResolver],
+  providers: [TmdbApiService, TopRatedResolver, SelectedMovieResolver, AllMoviesResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

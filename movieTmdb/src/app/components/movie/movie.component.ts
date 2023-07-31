@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import TMDBMovie from "src/app/models/TmdbMovie";
 
 @Component({
     selector: 'app-movie',
@@ -9,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 
 export class Movie implements OnInit {
 
-  movie!: any;
+  movie!: TMDBMovie;
   showLink = false;
 
   constructor(private route: ActivatedRoute) {}
