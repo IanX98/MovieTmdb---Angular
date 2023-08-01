@@ -21,16 +21,10 @@ export class Home implements OnInit {
   }
 
   onNext(): void {    
-    this.apiService.nextPage()
-    this.apiService.validatePageNumber()
-    this.fetchMovies(this.apiService.currentPage$.value);
+    this.apiService.nextPage();
   }
 
   onPrevious(): void {
-    if (this.apiService.validatePageNumber()) {
-      this.apiService.previousPage()    
-      this.apiService.validatePageNumber()  
-      this.fetchMovies(this.apiService.currentPage$.value);
-    }
+    this.apiService.previousPage(); 
   }
 }

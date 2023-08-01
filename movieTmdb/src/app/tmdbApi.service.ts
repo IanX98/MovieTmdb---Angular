@@ -1,6 +1,6 @@
 import { HttpClient  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, takeWhile } from 'rxjs';
+import { BehaviorSubject, Observable, filter, takeWhile } from 'rxjs';
 import TMDBMovie from './models/TmdbMovie';
 
 @Injectable({
@@ -9,17 +9,13 @@ import TMDBMovie from './models/TmdbMovie';
 export class TmdbApiService {
 
   constructor(private http: HttpClient) {
-    this.currentPage$.pipe(takeWhile(() => this.validatePageNumber())).subscribe(page => {
-      this.currentPage$.next(page);
+    this.currentPage$.pipe(filter(page => page > 0)).subscribe(page => {
+      this.fetchMovies(page);
     });
 
-    this.showMovies$.pipe(takeWhile(() => this.validateHomeMoviesObj())).subscribe(movies => {
-      this.showMovies$.next(movies);
-    });
-
-    this.searchedMovies$.pipe(takeWhile(() => this.validateSearchMoviesObj())).subscribe(searchedMovies => {
-      this.searchedMovies$.next(searchedMovies);
-    });
+    // this.searchText$.pipe(takeWhile(() => true)).subscribe(text => {
+    //   this.searchMovies(text);
+    // });
    }
     
    API_URL = 'https://api.themoviedb.org/3';
@@ -31,9 +27,10 @@ export class TmdbApiService {
   query!: string;
   movie!: TMDBMovie | any;
 
-    currentPage$ = new BehaviorSubject(1);
-    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getMovieObj());
-    searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getSearchObj(this.query));
+    currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
+    searchText$: BehaviorSubject<string> = new BehaviorSubject('');
+    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
+    searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
@@ -108,40 +105,6 @@ export class TmdbApiService {
 
     previousPage(): void {
       this.currentPage$.next(this.currentPage$.getValue() - 1);
-    }
-
-    validatePageNumber(): boolean {
-      if (this.currentPage$.value > 1) {
-        return true;
-      }
-
-      return false
-    }
-
-    requestHomeMoviesObj(): Observable<TMDBMovie> {
-      return this.http.get<TMDBMovie>('assets/TmdbMovieObj.json');
-    }
-
-    getMovieObj() {
-      let movieObj!: TMDBMovie[];
-      this.requestHomeMoviesObj().subscribe(
-        (tmdbMovie) => {
-          movieObj = [tmdbMovie];
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-
-      return movieObj;
-    }
-
-    validateHomeMoviesObj(): boolean {
-      if (this.showMovies$?.value != null) {
-        return true;
-      }
-
-      return false
     }
 
     validateSearchMoviesObj(): boolean {
