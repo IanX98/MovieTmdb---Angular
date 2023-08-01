@@ -16,7 +16,6 @@ export class Search implements OnInit {
     constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
 
     verifyMoviesLength(): boolean {
-      console.log(typeof this.searchedMovies)
       if (this.searchedMovies?.results.length > 0) {
         return true;
       } 
