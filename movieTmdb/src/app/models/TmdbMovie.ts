@@ -1,4 +1,4 @@
-export default interface TMDBMovie{
+export default interface TMDBMovie {
     id: number;
     title: string;
     adult: boolean;

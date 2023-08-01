@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import TMDBMovie from "src/app/models/TmdbMovie";
 import { TmdbApiService } from "src/app/tmdbApi.service";
 

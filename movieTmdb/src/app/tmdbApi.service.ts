@@ -12,6 +12,10 @@ export class TmdbApiService {
     this.currentPage$.pipe(takeWhile(() => this.validatePageNumber())).subscribe(page => {
       this.currentPage$.next(page);
     });
+
+    this.showMovies$.pipe(takeWhile(() => this.validateMoviesObj())).subscribe(movies => {
+      this.showMovies$.next(movies);
+    });
    }
     
   API_URL = 'https://api.themoviedb.org/3';
@@ -22,8 +26,8 @@ export class TmdbApiService {
 
     movie!: TMDBMovie | any;
     query!: string;
-    allMovies: TMDBMovie[] = [];
 
+    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getMovieObj());
     currentPage$ = new BehaviorSubject(1);
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
@@ -45,6 +49,16 @@ export class TmdbApiService {
     searchMovies = (query: string): Observable<Object> => {
       const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
       return this.http.get(url);
+    }
+
+    fetchMovies(page: number): TMDBMovie[] {
+      let movieObj!: TMDBMovie[];
+      this.getAllMovies(page).subscribe(response => {
+        this.showMovies$.next(response.results);
+        movieObj = this.showMovies$.value;
+      });
+
+      return movieObj;
     }
 
     setSelectedMovie = (movie: TMDBMovie): void => {
@@ -73,6 +87,32 @@ export class TmdbApiService {
 
     validatePageNumber(): boolean {
       if (this.currentPage$.value > 1) {
+        return true;
+      }
+
+      return false
+    }
+
+    requestTmdbMovieObj(): Observable<TMDBMovie> {
+      return this.http.get<TMDBMovie>('assets/TmdbMovieObj.json');
+    }
+
+    getMovieObj() {
+      let movieObj!: TMDBMovie[];
+      this.requestTmdbMovieObj().subscribe(
+        (tmdbMovie) => {
+          movieObj = [tmdbMovie];
+        },
+        (error) => {
+          console.error('Erro ao obter os dados:', error);
+        }
+      );
+
+      return movieObj;
+    }
+
+    validateMoviesObj(): boolean {
+      if (this.showMovies$?.value != null) {
         return true;
       }
 

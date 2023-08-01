@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import TMDBMovie from "src/app/models/TmdbMovie";
 import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
@@ -13,16 +12,12 @@ export class Home implements OnInit {
 
   constructor(protected apiService: TmdbApiService, private route: ActivatedRoute) {}
 
-  movies: TMDBMovie[] = [];
-
   ngOnInit(): void {
-    this.movies = this.route.snapshot.data["allMoviesResolver"].results
+    this.apiService.showMovies$.next(this.route.snapshot.data["allMoviesResolver"].results);
   }
 
   fetchMovies(page: number): void {
-    this.apiService.getAllMovies(page).subscribe(response => {
-      this.movies = response.results;
-    });
+    this.apiService.fetchMovies(page);
   }
 
   onNext(): void {    

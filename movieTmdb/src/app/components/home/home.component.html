@@ -1,5 +1,5 @@
 <h2 className="title">Filmes disponíveis:</h2>
-<div *ngFor="let movie of movies">
+<div *ngFor="let movie of this.apiService.showMovies$.value">
     <app-movie-card
         key="movie.id"
         [movie]="movie"
