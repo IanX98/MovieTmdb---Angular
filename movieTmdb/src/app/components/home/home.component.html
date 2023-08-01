@@ -11,7 +11,7 @@
     <button
       class="pagination-button"
       (click)="onPrevious()"
-      [disabled]="currentPage === 1"
+      [disabled]="this.apiService.currentPage$.value === 1"
     >
       Previous
     </button>

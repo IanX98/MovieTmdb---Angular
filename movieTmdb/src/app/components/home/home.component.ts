@@ -11,19 +11,12 @@ import { TmdbApiService } from "src/app/tmdbApi.service";
 
 export class Home implements OnInit {
 
-  constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
+  constructor(protected apiService: TmdbApiService, private route: ActivatedRoute) {}
 
   movies: TMDBMovie[] = [];
-  currentPage = 1;
 
   ngOnInit(): void {
-    this.allMoviesResolver()
-  }
-
-  allMoviesResolver() {
-    this.route.data.subscribe((resolvedData) => {
-      this.movies = resolvedData["allMoviesResolver"].results; 
-    });
+    this.movies = this.route.snapshot.data["allMoviesResolver"].results
   }
 
   fetchMovies(page: number): void {
@@ -32,16 +25,15 @@ export class Home implements OnInit {
     });
   }
 
-  onNext(): void {
-    this.currentPage++;
-    this.apiService.currentPage = this.currentPage
-    this.fetchMovies(this.currentPage);
+  onNext(): void {    
+    this.apiService.nextPage()
+    this.fetchMovies(this.apiService.currentPage$.value);
   }
 
   onPrevious(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.fetchMovies(this.currentPage);
+    if (this.apiService.currentPage$.value > 1) {
+      this.apiService.previousPage()      
+      this.fetchMovies(this.apiService.currentPage$.value);
     }
   }
 }

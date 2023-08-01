@@ -9,6 +9,6 @@ export class AllMoviesResolver implements Resolve<any> {
   constructor(private apiService: TmdbApiService) {}
 
   resolve(): Observable<TMDBMovie | any> {
-    return this.apiService.getAllMovies(this.apiService.currentPage);
+    return this.apiService.getAllMovies(this.apiService.currentPage$.value);
   };
 }

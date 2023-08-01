@@ -1,6 +1,6 @@
 import { HttpClient  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, takeWhile } from 'rxjs';
 import TMDBMovie from './models/TmdbMovie';
 
 @Injectable({
@@ -8,7 +8,11 @@ import TMDBMovie from './models/TmdbMovie';
 })
 export class TmdbApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.currentPage$.pipe(takeWhile(() => true)).subscribe(page => {
+      this.currentPage$.next(page);
+    });
+   }
     
   API_URL = 'https://api.themoviedb.org/3';
   API_IMG = 'https://image.tmdb.org/t/p/w500/';
@@ -18,19 +22,19 @@ export class TmdbApiService {
 
     movie!: TMDBMovie | any;
     query!: string;
-    currentPage = 1;
     allMovies: TMDBMovie[] = [];
+
+    currentPage$ = new BehaviorSubject(1);
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
     getAllMovies(page: number): Observable<TMDBMovie | any> {
       const url = `${this.API_URL}/movie/popular`;
-      const params = {
+      const params = { 
         api_key: this.API_KEY,
         page: page.toString(),
       };
 
-      this.currentPage = page;
       return this.http.get<string>(url, { params });
     }
 
@@ -57,5 +61,13 @@ export class TmdbApiService {
 
     getQueryText() {
       return this.query
+    }
+
+    nextPage() {
+      this.currentPage$.next(this.currentPage$.getValue() + 1)
+    }
+
+    previousPage() {
+      this.currentPage$.next(this.currentPage$.getValue() - 1);
     }
 }
