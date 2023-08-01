@@ -18,12 +18,12 @@ export class Search implements OnInit {
     }
 
     ngOnInit(): void {
-      this.query = this.apiService.getQueryText()
+      this.query = this.apiService.getQueryText();
 
       this.route.params.subscribe(
         (params: Params) => {
           this.query = params['string'];
-          this.apiService.getSearchObj(this.query);
+          this.apiService.searchText(this.query)
         }
       );
     }

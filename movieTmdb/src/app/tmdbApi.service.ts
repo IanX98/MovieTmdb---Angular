@@ -13,9 +13,9 @@ export class TmdbApiService {
       this.fetchMovies(page);
     });
 
-    // this.searchText$.pipe(takeWhile(() => true)).subscribe(text => {
-    //   this.searchMovies(text);
-    // });
+    this.searchText$.pipe(filter(query => query != null)).subscribe(text => {
+      this.getSearchMovies(text);
+    });
    }
     
    API_URL = 'https://api.themoviedb.org/3';
@@ -27,10 +27,10 @@ export class TmdbApiService {
   query!: string;
   movie!: TMDBMovie | any;
 
-    currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
-    searchText$: BehaviorSubject<string> = new BehaviorSubject('');
-    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
-    searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
+  searchText$: BehaviorSubject<string> = new BehaviorSubject('');
+  currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
+  showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
+  searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
@@ -48,19 +48,14 @@ export class TmdbApiService {
       return this.http.get<string>(this.topRatedURL);
     }
 
-    searchMovies = (query: string): Observable<Object> => {
-      const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
-      return this.http.get(url);
-    }
-
-    requestSearchMovies(query: string): Observable<TMDBMovie | any> {
+    searchMovies(query: string): Observable<TMDBMovie | any> {
       const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
       return this.http.get<string>(url);
     }
 
-    getSearchObj(query: string): TMDBMovie[] {
+    getSearchMovies(query: string): void {
       let searchObj!: TMDBMovie[];
-      this.requestSearchMovies(query).subscribe(
+      this.searchMovies(query).subscribe(
         (response) => {
           this.searchedMovies$.next(response.results)
           searchObj = this.searchedMovies$.value
@@ -69,8 +64,6 @@ export class TmdbApiService {
           console.error(error);
         }
       );
-
-      return searchObj;
     }
 
     fetchMovies(page: number): TMDBMovie[] {
@@ -113,5 +106,9 @@ export class TmdbApiService {
       }
 
       return false
+    }
+
+    searchText(query: string) {
+      this.searchText$.next(query);
     }
 }
