@@ -1,5 +1,6 @@
 import { Component, OnInit  } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import TMDBMovie from 'src/app/models/TmdbMovie';
 import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
@@ -10,11 +11,12 @@ import { TmdbApiService } from 'src/app/tmdbApi.service';
 export class Search implements OnInit {
 
     query!: string;
-    searchedMovies!: any;
+    searchedMovies!: TMDBMovie[] | any;
 
     constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
 
     verifyMoviesLength(): boolean {
+      console.log(typeof this.searchedMovies)
       if (this.searchedMovies?.results.length > 0) {
         return true;
       } 
