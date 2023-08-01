@@ -12,7 +12,7 @@ export class HeaderComponent {
 
   constructor(private apiService: TmdbApiService, private router: Router) {}
 
-  onSearchChange(text: string) {
+  onSearchChange(text: string): void {
 
     if (!text) return
 

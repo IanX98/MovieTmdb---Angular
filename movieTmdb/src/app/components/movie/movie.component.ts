@@ -15,7 +15,7 @@ export class Movie implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.data.subscribe((resolvedData) => {
       this.movie = resolvedData["selectedMovie"]; 
     });

@@ -9,7 +9,7 @@ import TMDBMovie from './models/TmdbMovie';
 export class TmdbApiService {
 
   constructor(private http: HttpClient) {
-    this.currentPage$.pipe(takeWhile(() => true)).subscribe(page => {
+    this.currentPage$.pipe(takeWhile(() => this.validatePageNumber())).subscribe(page => {
       this.currentPage$.next(page);
     });
    }
@@ -42,32 +42,40 @@ export class TmdbApiService {
       return this.http.get<string>(this.topRatedURL);
     }
 
-    searchMovies = (query: string) => {
+    searchMovies = (query: string): Observable<Object> => {
       const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
       return this.http.get(url);
     }
 
-    setSelectedMovie = (movie: TMDBMovie) => {
+    setSelectedMovie = (movie: TMDBMovie): void => {
       this.movie = movie
     }
 
-    getSelectedMovie = () => {
+    getSelectedMovie = (): TMDBMovie | any => {
       return this.movie;
     }
 
-    setQueryText(query: string) {
+    setQueryText(query: string): void {
       this.query = query;
     }
 
-    getQueryText() {
+    getQueryText(): string {
       return this.query
     }
 
-    nextPage() {
+    nextPage(): void {
       this.currentPage$.next(this.currentPage$.getValue() + 1)
     }
 
-    previousPage() {
+    previousPage(): void {
       this.currentPage$.next(this.currentPage$.getValue() - 1);
+    }
+
+    validatePageNumber(): boolean {
+      if (this.currentPage$.value > 1) {
+        return true;
+      }
+
+      return false
     }
 }

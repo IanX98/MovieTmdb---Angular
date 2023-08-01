@@ -18,12 +18,12 @@ export class MovieCard implements OnInit {
 
     constructor(private apiService: TmdbApiService) {}
   
-    ngOnInit() {
+    ngOnInit(): void {
       this.moviePath = `/movie/${this.movie.id}`;
       this.imageSrc = `${this.apiService.API_IMG}${this.movie.poster_path}`;
   }
 
-    selectMovie(movie: TMDBMovie) {
+    selectMovie(movie: TMDBMovie): void {
       this.apiService.setSelectedMovie(movie)
     }
 }

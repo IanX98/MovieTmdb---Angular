@@ -14,7 +14,7 @@ export class Search implements OnInit {
 
     constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
 
-    verifyMoviesLength() {
+    verifyMoviesLength(): boolean {
       if (this.searchedMovies?.results.length > 0) {
         return true;
       } 
@@ -22,7 +22,7 @@ export class Search implements OnInit {
       return false;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
       this.query = this.apiService.getQueryText()
 
       this.route.params.subscribe(

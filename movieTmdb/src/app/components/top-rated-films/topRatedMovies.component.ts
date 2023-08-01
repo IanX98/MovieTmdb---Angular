@@ -12,7 +12,7 @@ export class TopRatedMovies implements OnInit {
 
   topMovies: any;
 
-  verifyMoviesLength() {
+  verifyMoviesLength(): boolean {
     if (this.topMovies != null) {
       return true
     } 
@@ -20,7 +20,7 @@ export class TopRatedMovies implements OnInit {
     return false
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.data.subscribe((resolvedData) => {
       this.topMovies = resolvedData["topRatedData"]; 
     });
