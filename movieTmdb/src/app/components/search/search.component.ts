@@ -1,6 +1,5 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import TMDBMovie from 'src/app/models/TmdbMovie';
 import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
@@ -11,16 +10,11 @@ import { TmdbApiService } from 'src/app/tmdbApi.service';
 export class Search implements OnInit {
 
     query!: string;
-    searchedMovies!: TMDBMovie[] | any;
 
-    constructor(private apiService: TmdbApiService, private route: ActivatedRoute) {}
+    constructor(protected apiService: TmdbApiService, private route: ActivatedRoute) {}
 
-    verifyMoviesLength(): boolean {
-      if (this.searchedMovies?.results.length > 0) {
-        return true;
-      } 
-  
-      return false;
+    verifySearchMovies() {
+      return this.apiService.validateSearchMoviesObj();
     }
 
     ngOnInit(): void {
@@ -29,14 +23,7 @@ export class Search implements OnInit {
       this.route.params.subscribe(
         (params: Params) => {
           this.query = params['string'];
-          this.apiService.searchMovies(this.query).subscribe(
-            (response) => {
-              this.searchedMovies = response;
-            },
-            (error) => {
-              console.error(error);
-            }
-          );
+          this.apiService.getSearchObj(this.query);
         }
       );
     }

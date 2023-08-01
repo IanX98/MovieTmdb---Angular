@@ -13,22 +13,27 @@ export class TmdbApiService {
       this.currentPage$.next(page);
     });
 
-    this.showMovies$.pipe(takeWhile(() => this.validateMoviesObj())).subscribe(movies => {
+    this.showMovies$.pipe(takeWhile(() => this.validateHomeMoviesObj())).subscribe(movies => {
       this.showMovies$.next(movies);
+    });
+
+    this.searchedMovies$.pipe(takeWhile(() => this.validateSearchMoviesObj())).subscribe(searchedMovies => {
+      this.searchedMovies$.next(searchedMovies);
     });
    }
     
-  API_URL = 'https://api.themoviedb.org/3';
-  API_IMG = 'https://image.tmdb.org/t/p/w500/';
+   API_URL = 'https://api.themoviedb.org/3';
+   API_KEY = 'a11a3a1b7510b6fa1508f15d307460b6';
+   API_IMG = 'https://image.tmdb.org/t/p/w500/';
   API_MOVIE = 'https://api.themoviedb.org/3/movie/';
-  API_KEY = 'a11a3a1b7510b6fa1508f15d307460b6';
   API_SEARCH = 'https://api.themoviedb.org/3/search/movie/';
 
-    movie!: TMDBMovie | any;
-    query!: string;
+  query!: string;
+  movie!: TMDBMovie | any;
 
-    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getMovieObj());
     currentPage$ = new BehaviorSubject(1);
+    showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getMovieObj());
+    searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>(this.getSearchObj(this.query));
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
 
@@ -49,6 +54,26 @@ export class TmdbApiService {
     searchMovies = (query: string): Observable<Object> => {
       const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
       return this.http.get(url);
+    }
+
+    requestSearchMovies(query: string): Observable<TMDBMovie | any> {
+      const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
+      return this.http.get<string>(url);
+    }
+
+    getSearchObj(query: string): TMDBMovie[] {
+      let searchObj!: TMDBMovie[];
+      this.requestSearchMovies(query).subscribe(
+        (response) => {
+          this.searchedMovies$.next(response.results)
+          searchObj = this.searchedMovies$.value
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+
+      return searchObj;
     }
 
     fetchMovies(page: number): TMDBMovie[] {
@@ -93,26 +118,34 @@ export class TmdbApiService {
       return false
     }
 
-    requestTmdbMovieObj(): Observable<TMDBMovie> {
+    requestHomeMoviesObj(): Observable<TMDBMovie> {
       return this.http.get<TMDBMovie>('assets/TmdbMovieObj.json');
     }
 
     getMovieObj() {
       let movieObj!: TMDBMovie[];
-      this.requestTmdbMovieObj().subscribe(
+      this.requestHomeMoviesObj().subscribe(
         (tmdbMovie) => {
           movieObj = [tmdbMovie];
         },
         (error) => {
-          console.error('Erro ao obter os dados:', error);
+          console.error(error);
         }
       );
 
       return movieObj;
     }
 
-    validateMoviesObj(): boolean {
+    validateHomeMoviesObj(): boolean {
       if (this.showMovies$?.value != null) {
+        return true;
+      }
+
+      return false
+    }
+
+    validateSearchMoviesObj(): boolean {
+      if (this.searchedMovies$?.value?.length > 0) {
         return true;
       }
 
