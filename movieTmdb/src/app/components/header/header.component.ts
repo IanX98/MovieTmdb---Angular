@@ -14,8 +14,8 @@ export class HeaderComponent {
   onSearchChange(text: any): void {
     this.validateSearchText(text);
       
-    this.apiService.searchText(text)
-    this.searchText = ''
+    this.apiService.setSearchText(text);
+    this.searchText = '';
   }
 
   validateSearchText(text: string): void {

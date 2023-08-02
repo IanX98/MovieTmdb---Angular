@@ -88,14 +88,6 @@ export class TmdbApiService {
       return this.movie;
     }
 
-    setQueryText(query: string): void {
-      this.query = query;
-    }
-
-    getQueryText(): string {
-      return this.query
-    }
-
     nextPage(): void {
       this.currentPage$.next(this.currentPage$.getValue() + 1)
     }
@@ -112,7 +104,7 @@ export class TmdbApiService {
       return false
     }
 
-    searchText(query: string) {
+    setSearchText(query: string) {
       this.searchText$.next(query);
     }
 

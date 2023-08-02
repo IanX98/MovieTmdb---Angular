@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styles: ['h1 { font-weight: normal; }']
 })
-export class AppComponent {
-  title = 'webshop';
-}
+export class AppComponent {}

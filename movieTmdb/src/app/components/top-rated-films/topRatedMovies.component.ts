@@ -14,10 +14,10 @@ export class TopRatedMovies implements OnInit {
 
   verifyMoviesLength(): boolean {
     if (this.topMovies != null) {
-      return true
+      return true;
     } 
 
-    return false
+    return false;
   }
 
   ngOnInit(): void {

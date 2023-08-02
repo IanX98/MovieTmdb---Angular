@@ -24,6 +24,6 @@ export class MovieCard implements OnInit {
   }
 
     selectMovie(movie: TMDBMovie): void {
-      this.apiService.setSelectedMovie(movie)
+      this.apiService.setSelectedMovie(movie);
     }
 }
