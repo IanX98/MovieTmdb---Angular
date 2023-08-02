@@ -1,19 +1,39 @@
-<h2 className="title">Filmes disponíveis:</h2>
-<div *ngFor="let movie of this.apiService.showMovies$.value">
-    <app-movie-card
-        key="movie.id"
-        [movie]="movie"
-        [showLink]="true"
-    ></app-movie-card>
-</div>
-  
-<div class="pagination-buttons">
-    <button
-      class="pagination-button"
-      (click)="onPrevious()"
-      [disabled]="this.apiService.currentPage$.value === 1"
-    >
-      Previous
-    </button>
-    <button class="pagination-button next-button" (click)="onNext()">Next</button>
+<div className="container" *ngIf="showHomeMovies()">
+  <h2 className="title">Filmes disponíveis:</h2>
+  <div *ngFor="let movie of apiService.homeMovies$ | async">
+      <app-movie-card
+          key="movie.id"
+          [movie]="movie"
+          [showLink]="true"
+      ></app-movie-card>
   </div>
+  
+  <div class="pagination-buttons">
+      <button
+        class="pagination-button"
+        (click)="onPrevious()"
+        [disabled]="(apiService.currentPage$ | async) === 1"
+      >
+        Previous
+      </button>
+      <button class="pagination-button next-button" (click)="onNext()">Next</button>
+  </div>
+</div>
+
+<div className="container" *ngIf="!showHomeMovies()">
+  <h2 className="title">
+    Resultados para: <span className="query-text">{{ apiService.query }}</span>
+  </h2>
+  <div className="movies-container" *ngIf="verifySearchMovies(); else noMoviesFound">
+    <div *ngFor="let movie of apiService.searchedMovies$ | async">
+      <app-movie-card
+      key="movie.id"
+      [movie]="movie"
+      [showLink]="true"
+      ></app-movie-card>
+    </div>
+  </div>
+  <ng-template #noMoviesFound>
+    Nenhum Filme encontrado por "{{ apiService.query }}""
+  </ng-template>
+</div>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
@@ -10,17 +9,23 @@ export class HeaderComponent {
 
   searchText = '';
 
-  constructor(private apiService: TmdbApiService, private router: Router) {}
+  constructor(private apiService: TmdbApiService) {}
 
-  onSearchChange(text: string): void {
-
-    if (!text) return
-
-    this.searchText = text
-    
-    this.apiService.setQueryText(text);
-    
-    this.router.navigate([`/search/${text}`])
+  onSearchChange(text: any): void {
+    this.validateSearchText(text);
+      
+    this.apiService.searchText(text)
     this.searchText = ''
+  }
+
+  validateSearchText(text: string): void {
+    text = text.trim()
+    if (text === '') {
+      return;
+    } 
+  }
+
+  showHomeMovies() {
+    this.apiService.setShowHomeMovies(true);
   }
 }

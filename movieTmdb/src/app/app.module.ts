@@ -29,7 +29,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { Home } from './components/home/home.component';
 import { Movie } from './components/movie/movie.component';
 import { MovieCard } from './components/movie-card/movie-card.component';
-import { Search } from './components/search/search.component';
 import { PageNotFound } from './components/page-not-found/pageNotFound.component';
 import { TopRatedMovies } from './components/top-rated-films/topRatedMovies.component';
 import { AllMoviesResolver } from './allMoviesResolver';
@@ -56,7 +55,6 @@ const appRoutes: Routes = [
       selectedMovie: SelectedMovieResolver
     }
     },
-  {path: 'search/:string', component: Search},
   {path: 'not-found', component: PageNotFound},
   {path: '**', redirectTo: '/not-found'},
 ]
@@ -68,7 +66,6 @@ const appRoutes: Routes = [
     Home,
     Movie,
     MovieCard,
-    Search,
     TopRatedMovies
   ],
   imports: [

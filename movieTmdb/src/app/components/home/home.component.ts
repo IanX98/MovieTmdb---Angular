@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Params } from "@angular/router";
 import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
@@ -13,7 +13,15 @@ export class Home implements OnInit {
   constructor(protected apiService: TmdbApiService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.apiService.showMovies$.next(this.route.snapshot.data["allMoviesResolver"].results);
+    this.apiService.homeMovies$.next(this.route.snapshot.data["allMoviesResolver"].results);
+  }
+
+  verifySearchMovies() {
+    return this.apiService.validateSearchMoviesObj();
+  }
+
+  showHomeMovies() {
+    return this.apiService.getShowHomeMovies();
   }
 
   fetchMovies(page: number): void {

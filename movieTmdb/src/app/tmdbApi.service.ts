@@ -14,7 +14,11 @@ export class TmdbApiService {
     });
 
     this.searchText$.pipe(filter(query => query != null)).subscribe(text => {
-      this.getSearchMovies(text);
+      if (this.validateSearchText(text)) {
+        this.query = text;
+        this.setShowHomeMovies(false);
+        this.getSearchMovies(text);
+      } 
     });
    }
     
@@ -29,7 +33,9 @@ export class TmdbApiService {
 
   searchText$: BehaviorSubject<string> = new BehaviorSubject('');
   currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
-  showMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
+  showHomeMovies$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  showSearchedMovies$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  homeMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
   searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
 
     topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
@@ -54,11 +60,9 @@ export class TmdbApiService {
     }
 
     getSearchMovies(query: string): void {
-      let searchObj!: TMDBMovie[];
       this.searchMovies(query).subscribe(
         (response) => {
           this.searchedMovies$.next(response.results)
-          searchObj = this.searchedMovies$.value
         },
         (error) => {
           console.error(error);
@@ -69,8 +73,8 @@ export class TmdbApiService {
     fetchMovies(page: number): TMDBMovie[] {
       let movieObj!: TMDBMovie[];
       this.getAllMovies(page).subscribe(response => {
-        this.showMovies$.next(response.results);
-        movieObj = this.showMovies$.value;
+        this.homeMovies$.next(response.results);
+        movieObj = this.homeMovies$.value;
       });
 
       return movieObj;
@@ -110,5 +114,22 @@ export class TmdbApiService {
 
     searchText(query: string) {
       this.searchText$.next(query);
+    }
+
+    setShowHomeMovies(show: boolean): void {
+      this.showHomeMovies$.next(show);
+    }
+
+    getShowHomeMovies(): boolean {
+      return this.showHomeMovies$.value;
+    }
+
+    validateSearchText(text: string): boolean {
+      text = text.trim()
+      if (text != '') {
+        return true;
+      } 
+
+      return false;
     }
 }
