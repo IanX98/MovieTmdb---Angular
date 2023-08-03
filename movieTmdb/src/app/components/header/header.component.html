@@ -11,8 +11,11 @@
         [(ngModel)]="searchText"
         name="searchText"
         >
-        <button type="submit" (click)="onSearchChange(searchText)">
+        <a 
+            (click)="onSearchChange(searchText)"
+            [routerLink]="['/']"
+            [queryParams]="{searchText}">
             <mat-icon matBadgeColor="warn">search</mat-icon>
-        </button>
+        </a>
     </form>
 </mat-toolbar>
