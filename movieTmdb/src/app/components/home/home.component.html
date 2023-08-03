@@ -1,6 +1,5 @@
-<div className="container" *ngIf="showHomeMovies()">
-  <h2 className="title">Filmes disponíveis:</h2>
-  <div *ngFor="let movie of apiService.homeMovies$ | async">
+<div className="container" *ngIf="showHomeMovies()" id="homeMoviesGrid">
+  <div *ngFor="let movie of apiService.homeMovies$ | async" id="movie">
       <app-movie-card
           key="movie.id"
           [movie]="movie"
@@ -24,8 +23,8 @@
   <h2 className="title">
     Resultados para: <span className="query-text">{{ apiService.query }}</span>
   </h2>
-  <div className="movies-container" *ngIf="verifySearchMovies(); else noMoviesFound">
-    <div *ngFor="let movie of apiService.searchedMovies$ | async">
+  <div id="searchGrid" *ngIf="verifySearchMovies(); else noMoviesFound">
+    <div id="searchedMovies" *ngFor="let movie of apiService.searchedMovies$ | async">
       <app-movie-card
       key="movie.id"
       [movie]="movie"

@@ -3,7 +3,7 @@ import { TmdbApiService } from 'src/app/tmdbApi.service';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
 })
 export class HeaderComponent {
 
