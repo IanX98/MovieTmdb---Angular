@@ -85,7 +85,8 @@ export class TmdbApiService {
     }
 
     getSelectedMovie = (): TMDBMovie | any => {
-      return this.movie;
+      const url = `https://api.themoviedb.org/3/movie/${this.movie.id}?api_key=${this.API_KEY}&language=pt-BR`;
+      return this.http.get<string>(url);
     }
 
     nextPage(): void {
