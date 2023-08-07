@@ -43,3 +43,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   #hoverDetails:hover {
     color: white;
   }
+
+  @media screen and (max-width: 500px) {
+    #homeMoviesGrid, #searchGrid, #topRatedGrid {
+      display: grid;
+    }
+  }
