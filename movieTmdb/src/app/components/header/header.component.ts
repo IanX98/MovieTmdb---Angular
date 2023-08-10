@@ -24,8 +24,4 @@ export class HeaderComponent {
       return;
     } 
   }
-
-  showHomeMovies() {
-    this.apiService.setShowHomeMovies(true);
-  }
 }

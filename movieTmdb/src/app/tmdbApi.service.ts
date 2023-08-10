@@ -1,6 +1,6 @@
 import { HttpClient  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, filter, takeWhile } from 'rxjs';
+import { BehaviorSubject, Observable, filter  } from 'rxjs';
 import TMDBMovie from './models/TmdbMovie';
 
 @Injectable({
@@ -10,14 +10,14 @@ export class TmdbApiService {
 
   constructor(private http: HttpClient) {
     this.currentPage$.pipe(filter(page => page > 0)).subscribe(page => {
-      this.fetchMovies(page);
+      this.fetchMovies(page, this.query);
     });
 
     this.searchText$.pipe(filter(query => query != null)).subscribe(text => {
+      this.currentPage$.next(1)
       if (this.validateSearchText(text)) {
         this.query = text;
-        this.setShowHomeMovies(false);
-        this.getSearchMovies(text);
+        this.fetchMovies(this.currentPage$.value, text);
       } 
     });
    }
@@ -33,14 +33,19 @@ export class TmdbApiService {
 
   searchText$: BehaviorSubject<string> = new BehaviorSubject('');
   currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
-  showHomeMovies$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  showSearchedMovies$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   homeMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
-  searchedMovies$: BehaviorSubject<TMDBMovie[]> = new BehaviorSubject<TMDBMovie[]>([]);
 
-    topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
+    getAllMovies(page: number, query = ''): Observable<TMDBMovie | any> {
 
-    getAllMovies(page: number): Observable<TMDBMovie | any> {
+      if (query != '') {
+        const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
+        const params = { 
+          api_key: this.API_KEY,
+          page: page.toString(),
+        };
+        return this.http.get<string>(url, { params });
+      }
+
       const url = `${this.API_URL}/movie/popular`;
       const params = { 
         api_key: this.API_KEY,
@@ -51,28 +56,13 @@ export class TmdbApiService {
     }
 
     getTopRatedMovies(): Observable<TMDBMovie | any> {
-      return this.http.get<string>(this.topRatedURL);
+      const topRatedURL = `${this.API_MOVIE}top_rated?api_key=${this.API_KEY}`;
+      return this.http.get<string>(topRatedURL);
     }
 
-    searchMovies(query: string): Observable<TMDBMovie | any> {
-      const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
-      return this.http.get<string>(url);
-    }
-
-    getSearchMovies(query: string): void {
-      this.searchMovies(query).subscribe(
-        (response) => {
-          this.searchedMovies$.next(response.results)
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    }
-
-    fetchMovies(page: number): TMDBMovie[] {
+    fetchMovies(page: number, query = ''): TMDBMovie[] {
       let movieObj!: TMDBMovie[];
-      this.getAllMovies(page).subscribe(response => {
+      this.getAllMovies(page, query).subscribe(response => {
         this.homeMovies$.next(response.results);
         movieObj = this.homeMovies$.value;
       });
@@ -97,8 +87,8 @@ export class TmdbApiService {
       this.currentPage$.next(this.currentPage$.getValue() - 1);
     }
 
-    validateSearchMoviesObj(): boolean {
-      if (this.searchedMovies$?.value?.length > 0) {
+    validateHomeMoviesObj(): boolean {
+      if (this.homeMovies$?.value?.length > 0) {
         return true;
       }
 
@@ -107,14 +97,6 @@ export class TmdbApiService {
 
     setSearchText(query: string) {
       this.searchText$.next(query);
-    }
-
-    setShowHomeMovies(show: boolean): void {
-      this.showHomeMovies$.next(show);
-    }
-
-    getShowHomeMovies(): boolean {
-      return this.showHomeMovies$.value;
     }
 
     validateSearchText(text: string): boolean {

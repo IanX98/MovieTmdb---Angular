@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { TmdbApiService } from "src/app/tmdbApi.service";
 
 @Component({
@@ -16,12 +16,8 @@ export class Home implements OnInit {
     this.apiService.homeMovies$.next(this.route.snapshot.data["allMoviesResolver"].results);
   }
 
-  verifySearchMovies() {
-    return this.apiService.validateSearchMoviesObj();
-  }
-
-  showHomeMovies() {
-    return this.apiService.getShowHomeMovies();
+  verifyHomeMovies() {
+    return this.apiService.validateHomeMoviesObj();
   }
 
   fetchMovies(page: number): void {
